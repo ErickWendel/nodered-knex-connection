@@ -1,6 +1,6 @@
 {
   "name": "@erickwendel/nodered-knex-connection",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "knex-node.js",
   "scripts": {
     "start": "node knex-node.js"

@@ -1,4 +1,4 @@
-# Knext Nodered Connection
+# Knex Nodered Connection
 
 This Node-RED custom node provides a Knex instance for DB connections. (currently only working with Postgres)
 

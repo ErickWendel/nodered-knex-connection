@@ -17,7 +17,7 @@ This Node-RED custom node provides a Knex instance for DB connections. (currentl
 
 ## Example
 
-You an checkout the example in [./example.json](./example.json)
+You an checkout the example in [./example.json](https://github.com/ErickWendel/nodered-knex-connection/blob/main/example.json)
 
 ![](./example.png)
 

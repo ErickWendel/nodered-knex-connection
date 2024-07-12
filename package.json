@@ -1,5 +1,5 @@
 {
-  "name": "knex-nodered",
+  "name": "nodered-knex-connection",
   "version": "0.0.1",
   "main": "knex-node.js",
   "scripts": {
@@ -9,12 +9,15 @@
   "keywords": [
     "node-red",
     "knex",
-    "esm"
+    "pg"
   ],
   "node-red": {
     "nodes": {
       "knex-node": "knex-node.js"
     }
+  },
+  "engines": {
+    "node": ">=20.0.0"
   },
   "license": "ISC",
   "description": "",

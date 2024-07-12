@@ -1,6 +1,6 @@
 # Knext Nodered Connection
 
-This Node-RED custom node provides a Knex instance for PostgreSQL connections using ESM.
+This Node-RED custom node provides a Knex instance for DB connections. (currently only working with Postgres)
 
 ## Configuration
 
@@ -17,21 +17,13 @@ This Node-RED custom node provides a Knex instance for PostgreSQL connections us
 
 ## Example
 
-```json
-[
-  {
-    "id": "knexNodeId",
-    "type": "knex-node",
-    "name": "Knex Node",
-    "uri": "your_postgres_uri",
-    "ssl": false,
-    "timezone": "UTC",
-    "poolLog": true,
-    "poolMin": 2,
-    "poolMax": 10,
-    "acquireTimeoutMillis": 30000,
-    "createTimeoutMillis": 30000,
-    "idleTimeoutMillis": 1000,
-    "afterCreateFunction": "function (connection, callback) { connection.query(`SET timezone TO \"UTC\";`, function (err) { callback(err, connection); }); }"
-  }
-]
+You an checkout the example in [./example.json](./example.json)
+
+![](./example.png)
+
+## Features
+    - Reuses DB connections across nodes/flows
+    - Terminate connections when they're not needed anymore
+    - In case of deploying specific nodes, it doesn't change the running ones
+    - Update node status every 200ms checking if the DB Connection is still valid
+

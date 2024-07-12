@@ -1,5 +1,5 @@
 {
-  "name": "nodered-knex-connection",
+  "name": "@erickwendel/nodered-knex-connection",
   "version": "0.0.1",
   "main": "knex-node.js",
   "scripts": {
@@ -12,6 +12,7 @@
     "pg"
   ],
   "node-red": {
+    "version": ">=2.0.0",
     "nodes": {
       "knex-node": "knex-node.js"
     }

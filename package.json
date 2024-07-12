@@ -1,0 +1,25 @@
+{
+  "name": "knex-nodered",
+  "version": "0.0.1",
+  "main": "knex-node.js",
+  "scripts": {
+    "start": "node knex-node.js"
+  },
+  "author": "erickwendel",
+  "keywords": [
+    "node-red",
+    "knex",
+    "esm"
+  ],
+  "node-red": {
+    "nodes": {
+      "knex-node": "knex-node.js"
+    }
+  },
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "knex": "^3.1.0",
+    "pg": "^8.12.0"
+  }
+}

@@ -23,9 +23,13 @@
             additionalKnexConf: { value: "{}" },
         },
         oneditprepare: function () {
-            $('#node-config-input-connectionName').val(
-                `db-connection-${Date.now()}`
-            )
+            const connectionNameEl = $('#node-config-input-connectionName')
+            if (!connectionNameEl.val()) {
+                connectionNameEl.val(
+                    `db-connection-${Date.now()}`
+                )
+            }
+
 
             const dynamicInputs = [
                 "#node-config-input-uri",

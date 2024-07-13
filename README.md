@@ -13,105 +13,15 @@ This Node-RED custom node provides a Knex instance for DB connections. (currentl
 - **Acquire Timeout Millis**: The time in milliseconds to wait for a connection to be acquired.
 - **Create Timeout Millis**: The time in milliseconds to wait for a connection to be created.
 - **Idle Timeout Millis**: The time in milliseconds to wait before an idle connection is released.
-- **After Create Function**: A function to run after a connection is created.
 
 ## Example
 
-You an checkout the example in [./example.json](https://github.com/ErickWendel/nodered-knex-connection/blob/main/examples/example.json)
+You an checkout the examples in [./examples](https://github.com/ErickWendel/nodered-knex-connection/blob/main/examples/)
 
-![Node-RED flow](./example.png)
+![Node-RED flow](example.png)
 
 ```json
-[
-    {
-        "id": "df81e2e5ef4d4071",
-        "type": "inject",
-        "z": "5e284026436c6b42",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 320,
-        "y": 100,
-        "wires": [
-            [
-                "6d8ffd6bbb02d8cf"
-            ]
-        ]
-    },
-    {
-        "id": "1b23eda5384dcd27",
-        "type": "debug",
-        "z": "5e284026436c6b42",
-        "name": "show output",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 870,
-        "y": 100,
-        "wires": []
-    },
-    {
-        "id": "164a1ef82b99eabb",
-        "type": "function",
-        "z": "5e284026436c6b42",
-        "name": "select 1 from db",
-        "func": "const knex = msg.knex\nconst result = await knex.raw(`\n            SELECT 1 as result;\n        `);\n\nmsg.payload = result.rows[0].result; \n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 680,
-        "y": 100,
-        "wires": [
-            [
-                "1b23eda5384dcd27"
-            ]
-        ]
-    },
-    {
-        "id": "6d8ffd6bbb02d8cf",
-        "type": "knex-node",
-        "z": "5e284026436c6b42",
-        "uri": "${POSTGRES_URI}",
-        "searchPath": "[\"public\"]",
-        "ssl": false,
-        "timezone": "${TZ}",
-        "poolMin": "1",
-        "poolMax": 10,
-        "acquireTimeoutMillis": 30000,
-        "createTimeoutMillis": 30000,
-        "idleTimeoutMillis": 1000,
-        "additionalKnexConf": "{}",
-        "x": 490,
-        "y": 100,
-        "wires": [
-            [
-                "164a1ef82b99eabb"
-            ]
-        ]
-    }
-]
+[{"id":"df81e2e5ef4d4071","type":"inject","z":"5e284026436c6b42","name":"","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":320,"y":100,"wires":[["6d8ffd6bbb02d8cf"]]},{"id":"1b23eda5384dcd27","type":"debug","z":"5e284026436c6b42","name":"show output","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"payload","targetType":"msg","statusVal":"","statusType":"auto","x":870,"y":100,"wires":[]},{"id":"164a1ef82b99eabb","type":"function","z":"5e284026436c6b42","name":"select 1 from db","func":"const knex = msg.knex\nconst result = await knex.raw(`\n            SELECT 1 as result;\n        `);\n\nmsg.payload = result.rows[0].result; \n\nreturn msg;","outputs":1,"timeout":0,"noerr":0,"initialize":"","finalize":"","libs":[],"x":680,"y":100,"wires":[["1b23eda5384dcd27"]]},{"id":"6d8ffd6bbb02d8cf","type":"knex-node","z":"5e284026436c6b42","uri":"${POSTGRES_URI}","searchPath":"[\"public\"]","ssl":false,"timezone":"${TZ}","poolMin":"1","poolMax":10,"acquireTimeoutMillis":30000,"createTimeoutMillis":30000,"idleTimeoutMillis":1000,"additionalKnexConf":"{}","x":490,"y":100,"wires":[["164a1ef82b99eabb"]]}]
 ```
 ## Features
     - Reuses DB connections across nodes/flows
@@ -121,4 +31,4 @@ You an checkout the example in [./example.json](https://github.com/ErickWendel/n
 
 # Dependencies
 
-It uses knex on 3.1.0 and pg on 8.12.0"
+It uses knex on 3.1.0 and pg on 8.12.0

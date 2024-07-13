@@ -14,11 +14,12 @@
   "node-red": {
     "version": ">=2.0.0",
     "nodes": {
-      "knex-node": "knex-node.js"
+      "knex-node": "knex-node.js",
+      "knex-config": "knex-config.js"
     }
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=16.0.0"
   },
   "license": "ISC",
   "description": "",

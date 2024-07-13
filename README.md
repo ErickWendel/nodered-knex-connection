@@ -27,3 +27,6 @@ You an checkout the example in [./example.json](https://github.com/ErickWendel/n
     - In case of deploying specific nodes, it doesn't change the running ones
     - Update node status every 200ms checking if the DB Connection is still valid
 
+# Dependencies
+
+It uses knex on 3.1.0 and pg on 8.12.0"

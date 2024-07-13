@@ -6,94 +6,20 @@
         outputs: 1,
         icon: 'icon.svg',
         label: function () {
-            return this.name || "Knex Connection";
+            return "Knex Connection";
         },
         defaults: {
-            uri: { value: "${POSTGRES_URI_ENV}", required: true },
-            searchPath: { value: '["public"]' },
-            ssl: { value: false },
-            timezone: { value: "${TZ}" },
-            poolMin: { value: 2, validate: RED.validators.number() },
-            poolMax: { value: 10, validate: RED.validators.number() },
-            acquireTimeoutMillis: { value: 30000, validate: RED.validators.number() },
-            createTimeoutMillis: { value: 30000, validate: RED.validators.number() },
-            idleTimeoutMillis: { value: 1000, validate: RED.validators.number() },
-            additionalKnexConf: { value: "{}" },
+            connection: { value: "", type: "knex-config" },
         },
-        oneditprepare: function () {
-            // Initialize dynamic input fields
-            const dynamicInputs = [
-                "#node-input-uri",
-                "#node-input-timezone",
-            ].forEach(input => {
-                $(input).typedInput({
-                    types: ['env', 'flow', 'global', 'msg', 'str']
-                });
-            });
-            $('#node-input-additionalKnexConf').typedInput({
-                types: ['json']
-            });
-            $('#node-input-searchPath').typedInput({
-                types: ['json']
-            });
-
-            // Initialize number input fields
-            const numberInputs = [
-                "#node-input-poolMin",
-                "#node-input-poolMax",
-                "#node-input-acquireTimeoutMillis",
-                "#node-input-createTimeoutMillis",
-                "#node-input-idleTimeoutMillis"
-            ].forEach(input => {
-                $(input).typedInput({
-                    types: ['num', 'env', 'flow', 'global', 'msg']
-                });
-            });
-        }
     });
 </script>
 
 <script type="text/html" data-template-name="knex-node">
     <div class="form-row">
-        <label for="node-input-uri"><i class="icon-link"></i> URI</label>
-        <input type="text" id="node-input-uri" placeholder="Postgres URI">
+        <label for="node-input-connection"><i class="icon-link"></i> Connection</label>
+        <input type="text" id="node-input-connection" placeholder="Postgres connection">
     </div>
-    <div class="form-row">
-        <label for="node-input-ssl"><i class="icon-lock"></i> SSL</label>
-        <input type="checkbox" id="node-input-ssl">
-    </div>
-    <div class="form-row">
-        <label for="node-input-searchPath"><i class="icon-lock"></i> Search Path</label>
-        <input type="text" id="node-input-searchPath">
-    </div>
-    <div class="form-row">
-        <label for="node-input-timezone"><i class="icon-time"></i> Timezone</label>
-        <input type="text" id="node-input-timezone" placeholder="UTC">
-    </div>
-    <div class="form-row">
-        <label for="node-input-poolMin"><i class="icon-sort-number-asc"></i> Pool Min</label>
-        <input type="text" id="node-input-poolMin" placeholder="2">
-    </div>
-    <div class="form-row">
-        <label for="node-input-poolMax"><i class="icon-sort-number-asc"></i> Pool Max</label>
-        <input type="text" id="node-input-poolMax" placeholder="10">
-    </div>
-    <div class="form-row">
-        <label for="node-input-acquireTimeoutMillis"><i class="icon-clock"></i> Acquire Timeout (ms)</label>
-        <input type="text" id="node-input-acquireTimeoutMillis" placeholder="30000">
-    </div>
-    <div class="form-row">
-        <label for="node-input-createTimeoutMillis"><i class="icon-clock"></i> Create Timeout (ms)</label>
-        <input type="text" id="node-input-createTimeoutMillis" placeholder="30000">
-    </div>
-    <div class="form-row">
-        <label for="node-input-idleTimeoutMillis"><i class="icon-clock"></i> Idle Timeout (ms)</label>
-        <input type="text" id="node-input-idleTimeoutMillis" placeholder="1000">
-    </div>
-    <div class="form-row">
-        <label for="node-input-additionalKnexConf"><i class="icon-clock"></i> Additional Knex Config</label>
-        <input type="text" id="node-input-additionalKnexConf" placeholder="{}">
-    </div>
+
 </script>
 
 <script type="text/html" data-help-name="knex-node">

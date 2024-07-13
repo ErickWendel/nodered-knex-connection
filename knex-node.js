@@ -1,43 +1,6 @@
 const knex = require('knex');
 let _cachedKnexInstances = [];
 
-function deepMerge(target, source) {
-    for (const key in source) {
-        if (source[key] instanceof Object && key in target) {
-            Object.assign(source[key], deepMerge(target[key], source[key]));
-        }
-    }
-    Object.assign(target || {}, source);
-    return target;
-}
-
-const parseIfContainsValue = val => {
-    return val ? JSON.parse(val) : undefined;
-}
-
-function createKnexConfig(config) {
-    const toNum = val => val ? Number(val) : undefined
-    return deepMerge(
-        {
-            client: 'pg',
-            connection: {
-                connectionString: config.uri,
-                ssl: config.ssl,
-            },
-            searchPath: parseIfContainsValue(config.searchPath),
-            timezone: config.timezone,
-            pool: {
-                min: toNum(config.poolMin),
-                max: toNum(config.poolMax),
-                acquireTimeoutMillis: toNum(config.acquireTimeoutMillis),
-                createTimeoutMillis: toNum(config.createTimeoutMillis),
-                idleTimeoutMillis: toNum(config.idleTimeoutMillis),
-            },
-        },
-        parseIfContainsValue(config.additionalKnexConf),
-    );
-}
-
 function getInstance(knexConfig) {
     return _cachedKnexInstances.find(
         instance => JSON.stringify(instance.config) === JSON.stringify(knexConfig)
@@ -83,22 +46,41 @@ function testConnection({ instance, nodes }) {
         });
 }
 
+function dropRelatedInstances(node) {
+    for (const index in _cachedKnexInstances) {
+        const { instance, nodes } = _cachedKnexInstances[index];
+        if (!nodes.has(node)) continue;
+
+        nodes.delete(node);
+        if (nodes.size !== 0) continue;
+        clearInterval(instance.connectionIntervalId);
+        instance.destroy();
+        _cachedKnexInstances.splice(index, 1);
+    }
+}
+
 module.exports = function (RED) {
-    function KnexNode(config) {
-        RED.nodes.createNode(this, config);
+    function KnexNode(ctx) {
+        RED.nodes.createNode(this, ctx);
         const node = this;
+        const connection = RED.nodes.getNode(ctx.connection);
+        if (!connection) {
+            node.status({ fill: "red", shape: "ring", text: "you must choose a config" });
+            return
+        }
+
         let knexObj;
+        const config = connection.config
 
-        ; (async () => {
+            ; (async () => {
 
-            try {
-                const knexConfig = createKnexConfig(config);
-                knexObj = await findOrCreateKnexInstance(knexConfig, node);
-            } catch (error) {
-                node.error(error.message + "\n" + error.stack)
-            }
+                try {
+                    knexObj = await findOrCreateKnexInstance(config, node);
+                } catch (error) {
+                    node.error(error.message + "\n" + error.stack)
+                }
 
-        })()
+            })()
 
         node.on('input', function (msg) {
             msg.knex = knexObj.instance;
@@ -108,14 +90,8 @@ module.exports = function (RED) {
 
         node.on('close', async function () {
             node.status({ fill: "red", shape: "ring", text: "disconnected" });
+            dropRelatedInstances(node);
 
-            _cachedKnexInstances.forEach(({ instance, nodes }) => {
-                if (!nodes.has(node)) return
-
-                nodes.delete(node)
-                if (nodes.size !== 0) return
-                clearInterval(instance.connectionIntervalId)
-            })
         });
     }
 

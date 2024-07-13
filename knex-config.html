@@ -1,0 +1,112 @@
+<script type="text/javascript">
+    let _nameCounter = 0
+    RED.nodes.registerType('knex-config', {
+        category: 'config',
+        color: '#e16426',
+        inputs: 1,
+        outputs: 1,
+        icon: 'icon.svg',
+        label: function () {
+            return this.connectionName;
+        },
+        defaults: {
+            connectionName: { value: "" },
+            uri: { value: "${POSTGRES_URI_ENV}", required: true },
+            searchPath: { value: '["public"]' },
+            ssl: { value: false },
+            timezone: { value: "${TZ}" },
+            poolMin: { value: 2, validate: RED.validators.number() },
+            poolMax: { value: 10, validate: RED.validators.number() },
+            acquireTimeoutMillis: { value: 30000, validate: RED.validators.number() },
+            createTimeoutMillis: { value: 30000, validate: RED.validators.number() },
+            idleTimeoutMillis: { value: 1000, validate: RED.validators.number() },
+            additionalKnexConf: { value: "{}" },
+        },
+        oneditprepare: function () {
+            $('#node-config-input-connectionName').val(
+                `db-connection-${Date.now()}`
+            )
+
+            const dynamicInputs = [
+                "#node-config-input-uri",
+                "#node-config-input-timezone",
+            ].forEach(input => {
+                $(input).typedInput({
+                    types: ['env', 'flow', 'global', 'msg', 'str']
+                });
+            });
+            $('#node-config-input-additionalKnexConf').typedInput({
+                types: ['json']
+            })
+
+            $('#node-config-input-searchPath').typedInput({
+                types: ['json']
+            });
+
+            // Initialize number input fields
+            const numberInputs = [
+                "#node-config-input-poolMin",
+                "#node-config-input-poolMax",
+                "#node-config-input-acquireTimeoutMillis",
+                "#node-config-input-createTimeoutMillis",
+                "#node-config-input-idleTimeoutMillis"
+            ].forEach(input => {
+                $(input).typedInput({
+                    types: ['num', 'env', 'flow', 'global', 'msg']
+                });
+            });
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="knex-config">
+    <div class="form-row">
+        <label for="node-config-input-connectionName"><i class="icon-link"></i> connection name</label>
+        <input type="text" id="node-config-input-connectionName" placeholder="a custom name for storing this config">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-uri"><i class="icon-link"></i> URI</label>
+        <input type="text" id="node-config-input-uri" placeholder="Postgres URI">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-ssl"><i class="icon-lock"></i> SSL</label>
+        <input type="checkbox" id="node-config-input-ssl">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-searchPath"><i class="icon-lock"></i> Search Path</label>
+        <input type="text" id="node-config-input-searchPath">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-timezone"><i class="icon-time"></i> Timezone</label>
+        <input type="text" id="node-config-input-timezone" placeholder="UTC">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-poolMin"><i class="icon-sort-number-asc"></i> Pool Min</label>
+        <input type="text" id="node-config-input-poolMin" placeholder="2">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-poolMax"><i class="icon-sort-number-asc"></i> Pool Max</label>
+        <input type="text" id="node-config-input-poolMax" placeholder="10">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-acquireTimeoutMillis"><i class="icon-clock"></i> Acquire Timeout (ms)</label>
+        <input type="text" id="node-config-input-acquireTimeoutMillis" placeholder="30000">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-createTimeoutMillis"><i class="icon-clock"></i> Create Timeout (ms)</label>
+        <input type="text" id="node-config-input-createTimeoutMillis" placeholder="30000">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-idleTimeoutMillis"><i class="icon-clock"></i> Idle Timeout (ms)</label>
+        <input type="text" id="node-config-input-idleTimeoutMillis" placeholder="1000">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-additionalKnexConf"><i class="icon-clock"></i> Additional Knex Config</label>
+        <input type="text" id="node-config-input-additionalKnexConf" placeholder="{}">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="knex-node">
+    <p>A custom Node-RED node for configuring and using Knex with PostgreSQL.</p>
+    <p>This node will put the Knex instance into the <code>msg.knex</code> object, which you can use to perform database operations in subsequent nodes.</p>
+</script>

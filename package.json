@@ -2,7 +2,9 @@
   "name": "@erickwendel/nodered-knex-connection",
   "version": "0.0.7",
   "main": "knex-node.js",
-  "url": "https://github.com/ErickWendel/nodered-knex-connection/issues",
+  "bugs": {
+    "url": "https://github.com/ErickWendel/nodered-knex-connection/issues"
+  },
   "scripts": {
     "start": "node knex-node.js"
   },
